@@ -1,0 +1,72 @@
+Calc ES Source Available License
+Version 1.0
+Copyright (c) 2026 tofemiodus
+
+IMPORTANT: This is a custom source-available license, not the standard
+Business Source License (BSL). It has no automatic Change Date. It is not
+legal advice; obtain legal review before relying on it for enforcement.
+
+1. Definitions
+
+"Software" means the source code and other materials in this distribution
+that are identified as being provided under this license.
+
+"You" means the individual or legal entity exercising rights under this
+license.
+
+"Commercial Use" means use primarily intended for or directed toward
+commercial advantage or monetary compensation. It includes use in a business,
+for paid work or services, in a paid product, or to support advertising,
+subscriptions, sponsorships, or other revenue. Commercial Use requires a
+separate written license from the copyright holder.
+
+"Redistribute" means to publish, share, sublicense, sell, transfer, host, or
+otherwise make the Software or a modified version available to another
+person, whether for payment or free of charge.
+
+2. Permission for private non-commercial use
+
+Subject to this license, the copyright holder grants You a limited,
+worldwide, non-exclusive, non-transferable, revocable license to download,
+clone, run, study, and modify the Software solely for Your own private,
+non-commercial use.
+
+You may keep private copies and private modifications. You may not
+Redistribute the Software or any modified version. You may not use the
+Software for Commercial Use without a separate written license from the
+copyright holder.
+
+3. Restrictions and reserved rights
+
+Except for the limited permission in section 2, all rights are reserved.
+You may not remove or alter copyright, license, or trademark notices. This
+license does not grant permission to use the Calc ES name, logo, or other
+marks to suggest endorsement, affiliation, or origin.
+
+4. Suggestions
+
+You may submit ideas, suggestions, and feedback in the repository's Ideas
+discussion. You retain rights in what You post. By posting, You grant the
+copyright holder a worldwide, non-exclusive, perpetual, royalty-free right
+to use and adapt that feedback in Calc ES without obligation or compensation.
+
+5. Termination
+
+The permissions in this license terminate automatically if You violate its
+terms. Upon termination, You must stop using the Software and destroy copies
+in Your possession, except where applicable law requires otherwise.
+
+6. No warranty; limitation
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NONINFRINGEMENT. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COPYRIGHT
+HOLDER IS NOT LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
+FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THIS LICENSE.
+
+7. Previously published versions
+
+Earlier versions of Calc ES were distributed under the GNU Affero General
+Public License version 3.0. This license does not revoke or alter rights
+already granted to recipients of those earlier versions. Those versions
+remain governed by the license that accompanied them.
