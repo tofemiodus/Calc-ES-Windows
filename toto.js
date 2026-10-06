@@ -939,17 +939,36 @@
     return Array.from({ length: size }, (_, row) => values.slice(row * size, (row + 1) * size));
   }
 
+  function matrixPivotRow(values, column, rowScales) {
+    let pivotRow = column;
+    let pivotRatio = rowScales[column] === 0
+      ? 0
+      : Math.abs(values[column][column]) / rowScales[column];
+    for (let row = column + 1; row < values.length; row++) {
+      const ratio = rowScales[row] === 0 ? 0 : Math.abs(values[row][column]) / rowScales[row];
+      if (ratio > pivotRatio) {
+        pivotRow = row;
+        pivotRatio = ratio;
+      }
+    }
+    return pivotRow;
+  }
+
+  function isSingularMatrixPivot(values, pivotRow, column, rowScales) {
+    return Math.abs(values[pivotRow][column]) <=
+      Number.EPSILON * values.length * rowScales[pivotRow];
+  }
+
   function determinant(matrix) {
     const values = matrix.map((row) => [...row]);
+    const rowScales = matrix.map((row) => Math.max(...row.map(Math.abs)));
     let result = 1;
     for (let column = 0; column < values.length; column++) {
-      let pivotRow = column;
-      for (let row = column + 1; row < values.length; row++) {
-        if (Math.abs(values[row][column]) > Math.abs(values[pivotRow][column])) pivotRow = row;
-      }
-      if (Math.abs(values[pivotRow][column]) < 1e-12) return 0;
+      const pivotRow = matrixPivotRow(values, column, rowScales);
+      if (isSingularMatrixPivot(values, pivotRow, column, rowScales)) return 0;
       if (pivotRow !== column) {
         [values[column], values[pivotRow]] = [values[pivotRow], values[column]];
+        [rowScales[column], rowScales[pivotRow]] = [rowScales[pivotRow], rowScales[column]];
         result *= -1;
       }
       const pivot = values[column][column];
@@ -966,19 +985,18 @@
 
   function inverse(matrix) {
     const size = matrix.length;
+    const rowScales = matrix.map((row) => Math.max(...row.map(Math.abs)));
     const values = matrix.map((row, rowIndex) => [
       ...row,
       ...Array.from({ length: size }, (_, column) => rowIndex === column ? 1 : 0),
     ]);
     for (let column = 0; column < size; column++) {
-      let pivotRow = column;
-      for (let row = column + 1; row < size; row++) {
-        if (Math.abs(values[row][column]) > Math.abs(values[pivotRow][column])) pivotRow = row;
-      }
-      if (Math.abs(values[pivotRow][column]) < 1e-12) {
+      const pivotRow = matrixPivotRow(values, column, rowScales);
+      if (isSingularMatrixPivot(values, pivotRow, column, rowScales)) {
         throw new Error("This matrix is singular and has no inverse.");
       }
       [values[column], values[pivotRow]] = [values[pivotRow], values[column]];
+      [rowScales[column], rowScales[pivotRow]] = [rowScales[pivotRow], rowScales[column]];
       const pivot = values[column][column];
       values[column] = values[column].map((value) => value / pivot);
       for (let row = 0; row < size; row++) {
