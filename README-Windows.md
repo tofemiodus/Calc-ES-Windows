@@ -1,5 +1,10 @@
 # Calc ES for Windows
 
+See the [Windows app README](README.md) for the current desktop and web app
+installation instructions, release downloads, build steps, features, and license
+terms.
+# Calc ES for Windows
+
 This Windows edition runs the Calc ES web application as an offline desktop
 window. It uses the same HTML, CSS, and JavaScript as the hosted web app, so
 the calculator, linear/quadratic and multi-equation solvers, polynomial roots
