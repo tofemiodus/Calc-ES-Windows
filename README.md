@@ -1,30 +1,56 @@
 # Calc ES for Windows
 
-This Windows edition runs the Calc ES web application as an offline desktop
-window. It uses the same HTML, CSS, and JavaScript as the hosted web app, so
-the calculator, linear/quadratic and multi-equation solvers, polynomial roots
-and factorization, graphing, fractions and mixed numbers, permutations and
-combinations, and matrix operations are available without Python or GTK.
-The Linux-only GTK interface is not used by this Windows launcher.
+Calc ES is a scientific calculator and mathematics workbench with a Windows
+desktop application and a separate browser version. Both use the same
+HTML/CSS/JavaScript calculator implementation, so the tools and calculations
+stay consistent between them.
 
-## Install
+## Try the web app
 
-1. Download and extract the Windows source bundle from this repository's
-   [Releases](https://github.com/tofemiodus/Calc-ES-Windows/releases/latest).
-2. Double-click `install-windows.cmd`.
-3. Launch **Calc ES** from the Desktop or Start menu.
+Use the [Calc ES web app](https://tofemiodus.github.io/Calc-ES-Windows/) or
+open `index.html` in a modern browser. It works offline and needs no account.
+The Windows desktop app includes the same files under `wwwroot/`.
 
-The installer copies the web app files to `%LOCALAPPDATA%\Programs\Calc ES`.
-When Microsoft Edge is installed, it opens the app in an Edge app window;
-otherwise it opens in the default browser.
+## Download and install the Windows desktop app
 
-To run without installing, open `index.html` in a modern browser.
+1. Download the latest **Windows x64** package from
+   [GitHub Releases](https://github.com/tofemiodus/Calc-ES-Windows/releases/latest).
+2. Extract the ZIP, then run `install-windows.cmd`.
+3. Start **Calc ES** from the Desktop shortcut or Start menu.
 
-## Source and license
+The desktop application is a native Windows Forms window hosting the shared
+calculator through Microsoft Edge WebView2. Install the free
+[Evergreen WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)
+if Windows reports that it is missing. The calculator itself runs offline
+after installation.
 
-The desktop entry point and web application are included in this repository.
-Private non-commercial use and private modification are permitted by the
-[Calc ES Source Available License](LICENSE). Public redistribution and
-commercial use require written permission. See [TRADEMARKS.md](TRADEMARKS.md).
+## Build from source
 
-Submit ideas or feature requests in the repository's **Ideas** discussion.
+Install the .NET 10 SDK on Windows, then run:
+
+```powershell
+dotnet publish .\CalcES.Windows.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o .\publish
+```
+
+The published executable uses `wwwroot/index.html`, `wwwroot/toto.css`,
+`wwwroot/toto.js`, and `wwwroot/logo.svg`. Keep these assets beside the
+executable in the `wwwroot` folder. GitHub Actions also builds the Windows
+package on pushes and attaches a ZIP to version-tag releases.
+
+## Features
+
+The shared calculator provides scientific calculations, linear/quadratic and
+simultaneous equation solving, polynomial roots and factorization, graphing,
+fraction conversion, permutations/combinations, and matrix operations.
+
+## Source, license, and marks
+
+This repository is distributed under the
+[Calc ES Source Available License](LICENSE): private non-commercial use and
+private modifications are permitted; redistribution and commercial use are
+not. Earlier AGPL-licensed releases retain the terms that accompanied them.
+See [TRADEMARKS.md](TRADEMARKS.md) for the name and logo notice.
+
+This is a custom source-available license, not standard BSL 1.1. The trademark
+notice does not register a trademark; consider legal advice on licensing and
+trademark registration.
