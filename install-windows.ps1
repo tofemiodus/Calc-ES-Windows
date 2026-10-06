@@ -1,50 +1,44 @@
 $ErrorActionPreference = "Stop"
 
 $sourceDirectory = $PSScriptRoot
-$installDirectory = Join-Path $env:LOCALAPPDATA "Programs\Calc ES"
+$installDirectory = Join-Path $env:LOCALAPPDATA "ProgramsCalc ES"
 $desktopDirectory = [Environment]::GetFolderPath("Desktop")
-$startMenuDirectory = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs"
-$requiredFiles = @("index.html", "toto.css", "toto.js", "logo.svg")
+$startMenuDirectory = Join-Path $env:APPDATA "MicrosoftWindowsStart MenuPrograms"
+$applicationFile = Join-Path $sourceDirectory "CalcES.exe"
+$webAssets = Join-Path $sourceDirectory "wwwroot"
 
-foreach ($file in $requiredFiles) {
-    $sourceFile = Join-Path $sourceDirectory $file
-    if (-not (Test-Path -LiteralPath $sourceFile -PathType Leaf)) {
-        throw "Required Calc ES file is missing: $sourceFile"
+if (-not (Test-Path -LiteralPath $applicationFile -PathType Leaf)) {
+    throw "CalcES.exe is missing. Download and extract the Windows release package before running this installer."
+}
+foreach ($file in @("index.html", "toto.css", "toto.js", "logo.svg")) {
+    if (-not (Test-Path -LiteralPath (Join-Path $webAssets $file) -PathType Leaf)) {
+        throw "Required Calc ES web asset is missing: $(Join-Path $webAssets $file)"
     }
 }
 
 New-Item -ItemType Directory -Force -Path $installDirectory, $startMenuDirectory | Out-Null
-foreach ($file in $requiredFiles) {
-    Copy-Item -LiteralPath (Join-Path $sourceDirectory $file) -Destination $installDirectory -Force
+Get-ChildItem -LiteralPath $sourceDirectory -File |
+    Where-Object { $_.Extension -in @(".exe", ".dll", ".json") } |
+    ForEach-Object {
+        Copy-Item -LiteralPath $_.FullName -Destination $installDirectory -Force
+    }
+Copy-Item -LiteralPath $webAssets -Destination $installDirectory -Recurse -Force
+foreach ($file in @("LICENSE", "README.md", "TRADEMARKS.md")) {
+    $sourceFile = Join-Path $sourceDirectory $file
+    if (Test-Path -LiteralPath $sourceFile -PathType Leaf) {
+        Copy-Item -LiteralPath $sourceFile -Destination $installDirectory -Force
+    }
 }
-
-$indexPath = Join-Path $installDirectory "index.html"
-$edgeCandidates = @(
-    (Join-Path ${env:ProgramFiles(x86)} "Microsoft\Edge\Application\msedge.exe"),
-    (Join-Path $env:ProgramFiles "Microsoft\Edge\Application\msedge.exe"),
-    (Join-Path $env:LOCALAPPDATA "Microsoft\Edge\Application\msedge.exe")
-)
-$edgePath = $edgeCandidates | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
 
 foreach ($shortcutPath in @(
     (Join-Path $desktopDirectory "Calc ES.lnk"),
     (Join-Path $startMenuDirectory "Calc ES.lnk")
 )) {
     $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcutPath)
-    if ($edgePath) {
-        $shortcut.TargetPath = $edgePath
-        $shortcut.Arguments = "--app=`"$([Uri]::new($indexPath).AbsoluteUri)`""
-        $shortcut.WorkingDirectory = $installDirectory
-    }
-    else {
-        $shortcut.TargetPath = $indexPath
-        $shortcut.WorkingDirectory = $installDirectory
-    }
+    $shortcut.TargetPath = Join-Path $installDirectory "CalcES.exe"
+    $shortcut.WorkingDirectory = $installDirectory
     $shortcut.Description = "Calc ES scientific calculator"
     $shortcut.Save()
 }
 
-Write-Output "Calc ES is installed. Launch it from the Desktop or Start menu."
-if (-not $edgePath) {
-    Write-Output "Microsoft Edge was not found; Calc ES will open in your default browser."
-}
+Write-Output "Calc ES for Windows is installed. Launch it from the Desktop or Start menu."
